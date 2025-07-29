@@ -22,7 +22,7 @@ const Register = () => {
     e.preventDefault();
     try{
       await axios.post("http://localhost:5000/api/auth/register", input,{withCredentials: true}); // Send the registration data to the server
-      navigate("/login");
+      navigate('/login');
     }
     catch(err){
       setError(err.response.data)

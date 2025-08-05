@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser'; // Importing cookie-parser for handlin
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:5173',
   credentials: true
 })); // Use CORS middleware to allow cross-origin requests
 app.use(express.json()); // Middleware to parse JSON bodies

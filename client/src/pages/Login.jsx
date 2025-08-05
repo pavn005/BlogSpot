@@ -18,7 +18,7 @@ const Login = () => {
 
   const { login } = useContext(AuthContext); // to get the current user from the context
 
-  
+
   const handleChange = (e) => {
     setInput((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }

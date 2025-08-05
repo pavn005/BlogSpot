@@ -46,10 +46,10 @@ export const login = (req, res) => {
 
     if(!isPasswordCorrect) return res.status(400).json("Wrong Password or Username!!!")
 
-  const token = jwt.sign({id : data[0].id},"jwtkey") // Generate JWT token with user ID
+  const token = jwt.sign({id : data[0].id},"jwtkey"); // Generate JWT token with user ID
   const { password, ...other } = data[0]; // Exclude password from the response
 
-  res.cookie("accessToken", token, {
+  res.cookie("access_token", token, {
     httpOnly: true, // Ensures the cookie is not accessible via JavaScript but only via api requests
   }).status(200).json(other); // Send other user data excluding password
 })

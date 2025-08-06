@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Menu from '../components/Menu'
 import Delete from '../img/delete.png'
 import Edit from '../img/edit.png'
@@ -10,6 +10,7 @@ import { AuthContext } from '../context/AuthContext.jsx'
 const Single = () => {
   const [post, setPost] = useState({})
   const location = useLocation()
+  const navigate = useNavigate()
   const postId = location.pathname.split('/')[2]
   const { currentUser } = useContext(AuthContext)
 
@@ -32,12 +33,22 @@ const Single = () => {
     return <div>Loading...</div>
   }
 
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/api/posts/${postId}`) // Delete the post 
+      Navigate("/"); // Redirect to home after deletion
+    }
+    catch (error) {
+      console.error("Error deleting post:", error)
+    }
+  }
+  
   return (
     <div className="single">
       <div className="content">
         <img src={post.img} alt="" />
         <div className="user">
-          <img src="https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
+          {post.userImg && <img src={post.userImg} alt="" />}
           <div className="info">
             <span>{post.username}</span>
             <p>Posted {moment(post.date).fromNow()}</p>
@@ -47,7 +58,7 @@ const Single = () => {
               <Link to={`/write?edit=${postId}`}>
                 <img src={Edit} alt="" />
               </Link>
-              <img src={Delete} alt="" />
+              <img onClick={handleDelete} src={Delete} alt="" />
             </div>
           )}
         </div>
@@ -62,6 +73,7 @@ const Single = () => {
 export default Single
 
 
+// TO include user.img and post.img and post.desc in single page we made these changes
 // Removed Array.isArray() check - a single post should be an object, not an array
 // Changed error state to empty object {} instead of empty array []
 // Added null check for currentUser?.username

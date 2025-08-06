@@ -1,46 +1,44 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import axios from 'axios'
 
 const Home = () => {
-  
-  const posts = [
-    {
-      id:1,
-      title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
-      img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id:2,
-      title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
-      img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id:3,
-      title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
-      img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id:4,
-      title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
-      img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  // Initialize posts as an empty array
+  const [posts, setPosts] = useState([])
+
+  const cat = useLocation().search;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Change to GET request if you're fetching data
+        const response = await axios.get(`http://localhost:5000/api/posts${cat}`)
+        // Ensure the response.data is an array
+        setPosts(Array.isArray(response.data) ? response.data : [])
+      } catch (error) {
+        console.error("Error fetching posts:", error)
+        setPosts([]) // Set empty array on error
+      }
     }
-  ]
-  
+    fetchData()
+  }, [cat])
+
+  // Add loading state handling
+  if (!posts.length) {
+    return <div className="home">Loading posts...</div>
+  }
+
   return (
     <div className="home">
       <div className="posts">
-        {posts.map(post=>(
+        {posts.map(post => (
           <div className="post" key={post.id}>
             <div className="img">
               <img src={post.img} alt="" />
             </div>
             <div className="content">
               <Link to={`/post/${post.id}`} className="link">
-              <h1>{post.title}</h1>
+                <h1>{post.title}</h1>
               </Link>
               <p>{post.desc}</p>
               <button>Read More</button>

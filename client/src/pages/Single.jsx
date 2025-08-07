@@ -34,14 +34,15 @@ const Single = () => {
   }
 
   const handleDelete = async () => {
-    try {
-      await axios.delete(`http://localhost:5000/api/posts/${postId}`) // Delete the post 
-      Navigate("/"); // Redirect to home after deletion
-    }
-    catch (error) {
-      console.error("Error deleting post:", error)
-    }
+  try {
+    await axios.delete(`http://localhost:5000/api/posts/${postId}`, {
+      withCredentials: true  // Important for sending cookies
+    });
+    navigate("/");
+  } catch (error) {
+    console.error("Error deleting post:", error);
   }
+};
   
   return (
     <div className="single">
@@ -65,7 +66,7 @@ const Single = () => {
         <h1>{post.title}</h1>
         <p>{post.desc}</p>
       </div>
-      <Menu />
+      <Menu cat={post.cat}/>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import authRouter from './routes/auth.js';
 import userRouter from './routes/users.js';
 import cors from 'cors'; // Importing CORS for cross-origin requests
 import cookieParser from 'cookie-parser'; // Importing cookie-parser for handling cookies
+import multer from 'multer';
 
 const app = express();
 
@@ -13,6 +14,14 @@ app.use(cors({
 })); // Use CORS middleware to allow cross-origin requests
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cookieParser()); // Middleware to parse cookies
+
+const upload = multer({ dest: './uploads/' })
+
+app.post('/api/upload', upload.single('file'), (req, res,next) => {
+res.status(200).json("Img has been Uploaded!"); // Respond with the filename of the uploaded file
+
+});
+
 app.use('/api/posts', postRouter); // Use the postRouter for routes starting with /posts
 app.use('/api/auth',authRouter); // Use the authRouter for routes starting with /api/auth
 app.use('/api/users',userRouter); // Use the userRouter for routes starting with /api/users

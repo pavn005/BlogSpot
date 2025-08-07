@@ -1,33 +1,50 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 
-const Menu = () => {
+const Menu = ({cat}) => {
 
-  const posts = [
-    {
-      id:1,
-      title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
-      img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id:2,
-      title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
-      img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id:3,
-      title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
-      img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id:4,
-      title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
-      img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Change to GET request if you're fetching data
+        const response = await axios.get(`http://localhost:5000/api/posts/?cat=${cat}`)
+        // Ensure the response.data is an array
+        setPosts(Array.isArray(response.data) ? response.data : [])
+      } catch (error) {
+        console.error("Error fetching posts:", error)
+        setPosts([]) // Set empty array on error
+      }
     }
-  ]
+    fetchData()
+  }, [cat])
+  //const posts = [
+    // {
+    //   id:1,
+    //   title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
+    //   desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
+    //   img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    // },
+    // {
+    //   id:2,
+    //   title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
+    //   desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
+    //   img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    // },
+    // {
+    //   id:3,
+    //   title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
+    //   desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
+    //   img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    // },
+    // {
+    //   id:4,
+    //   title: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
+    //   desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus, quos, quia, voluptatum. Quisquam, voluptatibus, quos, quia, voluptatum.",
+    //   img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    // }
+  //]
 
   return (
     <div className='menu'>

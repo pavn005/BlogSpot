@@ -43,20 +43,34 @@ const Single = () => {
     console.error("Error deleting post:", error);
   }
 };
-  
+
+const getText = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  }
+
+const formatDate = (dateString) => {
+  try {
+    return moment(new Date(dateString)).fromNow();
+  } catch (error) {
+    console.error("Invalid date:", dateString);
+    return "Date unavailable";
+  }
+}
+
   return (
     <div className="single">
       <div className="content">
-        <img src={post.img} alt="" />
+        <img src={`../uploads/${post.img}`} alt="" />
         <div className="user">
           {post.userImg && <img src={post.userImg} alt="" />}
           <div className="info">
             <span>{post.username}</span>
-            <p>Posted {moment(post.date).fromNow()}</p>
+            <p>Posted {formatDate(post.date)}</p>
           </div>
           {currentUser?.username === post.username && (
             <div className="edit">
-              <Link to={`/write?edit=${postId}`}>
+              <Link to={`/write?edit=${postId}`} state={post}>
                 <img src={Edit} alt="" />
               </Link>
               <img onClick={handleDelete} src={Delete} alt="" />
@@ -64,7 +78,7 @@ const Single = () => {
           )}
         </div>
         <h1>{post.title}</h1>
-        <p>{post.desc}</p>
+        <p>{getText(post.desc)}</p>
       </div>
       <Menu cat={post.cat}/>
     </div>

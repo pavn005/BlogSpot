@@ -15,10 +15,21 @@ app.use(cors({
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cookieParser()); // Middleware to parse cookies
 
-const upload = multer({ dest: './uploads/' })
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../client/public/uploads'); // Set the destination for uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now()+file.originalname)
+  }
+})
+
+
+const upload = multer({ storage: storage });
 
 app.post('/api/upload', upload.single('file'), (req, res,next) => {
-res.status(200).json("Img has been Uploaded!"); // Respond with the filename of the uploaded file
+const file = req.file; // Get the uploaded file from the request
+  res.status(200).json(file.filename); // Respond with the filename of the uploaded file
 
 });
 
